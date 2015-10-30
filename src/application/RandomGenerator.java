@@ -33,7 +33,7 @@ public class RandomGenerator {
 	public static void generateStrings(File file, double toGenerate, int length, boolean varyLengths,
 			boolean allowNums, boolean allowUCLetters, boolean allowLCLetters, boolean allowStartZero, boolean allowDuplicates,
 			String listPrefix, String entryPrefix, String listSuffix, String entrySuffix, boolean oneLine) {
-		
+		long startTime = System.nanoTime();
 		try {
 			ArrayList<String> prev = new ArrayList<String>();
 			String[] allowedList = getCharList(allowNums, allowUCLetters, allowLCLetters);
@@ -47,7 +47,7 @@ public class RandomGenerator {
 				if (!listPrefix.equals("") && !listPrefix.equals(null)) {
 					printer.format("%1$s%n", listPrefix);
 				} else {
-					printer.format("%1$s%n", listPrefix);
+					printer.format("%1$s", listPrefix);
 				}
 			}
 			
@@ -60,9 +60,9 @@ public class RandomGenerator {
 					}
 				}
 				if (oneLine) {
-					printer.format("%1$s%2$s$3$s", entryPrefix, str, entrySuffix);
+					printer.format("%1$s%2$s%3$s", entryPrefix, str, entrySuffix);
 				} else {
-					printer.format("%1$s%2$s$3$s%n", entryPrefix, str, entrySuffix);
+					printer.format("%1$s%2$s%3$s%n", entryPrefix, str, entrySuffix);
 				}
 				
 			}
@@ -77,8 +77,9 @@ public class RandomGenerator {
 
 			writer.close();
 			printer.close();
+			startInfoDlg("Operation complete!", String.format("Finished writing to file after %n" + (System.nanoTime() - startTime) + " nanoseconds."));
 		} catch (Exception e) {
-			startErrorDlg("Error building random file!", "Unable to complete random file.");
+			startInfoDlg("Error building random file!", "Unable to complete random file.");
 		}
 		
 	}
@@ -133,17 +134,19 @@ public class RandomGenerator {
 		return chars[rand.nextInt(chars.length)];
 	}
 
-	public static File startFileOpener(String title) {
-
+	public static File startFileSaver(String title) {
+		
 		Stage popup = new Stage();
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle(title);
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-		return fileChooser.showOpenDialog(popup);
-
+		return fileChooser.showSaveDialog(popup);
+		
 	}
+		
+	
 
-	public static void startErrorDlg(String title, String info) {
+	public static void startInfoDlg(String title, String info) {
 
 		Stage popup = new Stage(StageStyle.UTILITY);
 		VBox layout = new VBox(5);
