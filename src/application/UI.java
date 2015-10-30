@@ -1,5 +1,7 @@
 package application;
 
+import java.io.File;
+
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -69,7 +71,11 @@ public class UI {
 		this.root.setPadding(new Insets(10));
 		this.root.getChildren().addAll(this.title, this.elementsBox, this.lengthBox, this.charsBox, this.subCharsBox, this.prefixBox, this.suffixBox, this.oneLineBox, this.saveInfo, this.startButton);
 		this.startButton.setOnAction(e -> {
-			RandomGenerator.generateStrings(RandomGenerator.startFileSaver("Select a location to save the file."), Double.parseDouble(this.elements.getText()), Integer.parseInt(this.maxLength.getText()), this.varyLength.isSelected(), this.allowNumbers.isSelected(), this.allowUCLetters.isSelected(), this.allowLCLetters.isSelected(), this.allowStartZero.isSelected(), this.allowDuplicates.isSelected(), this.listPrefix.getText(), this.elementPrefix.getText(), this.listSuffix.getText(), this.elementSuffix.getText(), this.oneLine.isSelected());
+			File file = RandomGenerator.startFileSaver("Select a location to save the file.");
+			Thread thread = new Thread(() -> RandomGenerator.generateStrings(file, Double.parseDouble(this.elements.getText()), Integer.parseInt(this.maxLength.getText()), this.varyLength.isSelected(), this.allowNumbers.isSelected(), this.allowUCLetters.isSelected(), this.allowLCLetters.isSelected(), this.allowStartZero.isSelected(), this.allowDuplicates.isSelected(), this.listPrefix.getText(), this.elementPrefix.getText(), this.listSuffix.getText(), this.elementSuffix.getText(), this.oneLine.isSelected()));
+			thread.setDaemon(true);
+			thread.start();
+			RandomGenerator.startInfoDlg("Do not interrupt!", String.format("You have started the writing process; %nPlease do not close the window until the 'completed' dialog appears."));
 		});
 	}
 	

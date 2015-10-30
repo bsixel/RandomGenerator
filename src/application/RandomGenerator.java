@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -77,9 +78,9 @@ public class RandomGenerator {
 
 			writer.close();
 			printer.close();
-			startInfoDlg("Operation complete!", String.format("Finished writing to file after %n" + (System.nanoTime() - startTime) + " nanoseconds."));
+			Platform.runLater(() -> startInfoDlg("Operation complete!", String.format("Finished writing to file after %n" + (System.nanoTime() - startTime) + " nanoseconds.")));
 		} catch (Exception e) {
-			startInfoDlg("Error building random file!", "Unable to complete random file.");
+			Platform.runLater(() -> startInfoDlg("Error building random file!", "Unable to complete random file."));
 		}
 		
 	}
